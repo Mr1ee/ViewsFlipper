@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 
 public class ViewsFlipper extends FrameLayout {
+    @SuppressWarnings("unused")
+    private static final String TAG = ViewsFlipper.class.getSimpleName();
 
     private static final int DEFAULT_FLIP_DURATION = 500;
 
@@ -103,7 +105,13 @@ public class ViewsFlipper extends FrameLayout {
             super.onChanged();
             // when data changed, reset view.
             reset();
-            animatorSet.end();
+            if (animatorSet != null) {
+                animatorSet.end();
+            }
+
+            if (mAdapter == null || mAdapter.getItemCount() <= 0) {
+                throw new IllegalArgumentException("please call ViewsFlipper.setAdapter first and set non-empty data!");
+            }
 
             // restart from first child view.
             mRunning = true;
@@ -158,6 +166,9 @@ public class ViewsFlipper extends FrameLayout {
      * without show animation.
      */
     public void startFlipping() {
+        if (mAdapter == null) {
+            throw new IllegalArgumentException("you must call ViewsFlipper.setAdapter first!");
+        }
         mStarted = true;
         updateRunning(false);
     }
@@ -208,12 +219,20 @@ public class ViewsFlipper extends FrameLayout {
 
     @SuppressWarnings("unchecked cast, unused")
     public <VH extends RecyclerView.ViewHolder, T extends RecyclerView.Adapter<VH>> void setAdapter(T adapter) {
+        if (adapter == null || adapter.getItemCount() <= 0) {
+            throw new IllegalArgumentException("please call ViewsFlipper.setAdapter first and set non-empty data!");
+        }
+
         reset();
         this.removeAllViews();
         this.mAdapter = (RecyclerView.Adapter<RecyclerView.ViewHolder>) adapter;
         this.mAdapter.registerAdapterDataObserver(mObserver);
         showingVH = mAdapter.createViewHolder(this, 0);
         shadowedVH = mAdapter.createViewHolder(this, 0);
+        //noinspection ConstantConditions
+        if (showingVH == null || shadowedVH == null) {
+            throw new IllegalArgumentException("ViewHolder must be not null!");
+        }
 
         //add child view to parent
         addView(showingVH.itemView);
