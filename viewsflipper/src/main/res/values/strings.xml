@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ViewsFlipper</string>
+    <declare-styleable name="ViewsFlipper">
+        <attr name="flipInterval" format="integer"/>
+        <attr name="flipDuration" format="integer"/>
+    </declare-styleable>
+</resources>
