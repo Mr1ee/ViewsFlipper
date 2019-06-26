@@ -1,6 +1,9 @@
 # ViewsFlipper
 模仿淘宝、京东消息轮播控件，利用了RecylerView.Adapter，用法和ReclerView的用法完全一致，非常容易扩展。
 
+# Demo示例
+<img width="360" height="640" src=https://github.com/Mr1ee/ViewsFlipper/blob/master/screenshots/screenshot.gif/>
+
 # 使用方法
 在XML中设置如下。其中flipDuration表示动画时长， flipInterval是轮播间隔时间，flipInterval一定要大于flipDuration，否则会抛出异常。
 ```java
