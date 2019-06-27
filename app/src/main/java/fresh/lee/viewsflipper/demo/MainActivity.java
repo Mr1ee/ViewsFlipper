@@ -123,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull VH holder, int position) {
-            Log.d("======", "position = " + position);
             holder.bind(list.get(position).first, list.get(position).second);
         }
 
@@ -144,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         void bind(int drawableId, String lyric) {
+            Log.d("==========", "lyric : " + lyric);
             iv.setImageResource(drawableId);
             tvLyric.setText(lyric);
             tvLyric.setTextColor(colors.get(new Random(System.currentTimeMillis()).nextInt(5)));

@@ -7,7 +7,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -114,6 +113,8 @@ public class ViewsFlipper extends FrameLayout {
             super.onChanged();
             // when data changed, reset view.
             reset();
+            // if animator set is not null, maybe the view is in animation,
+            // so we need end the animator first.
             if (animatorSet != null) {
                 animatorSet.end();
             }
@@ -226,31 +227,39 @@ public class ViewsFlipper extends FrameLayout {
         return mFlipDuration;
     }
 
+    /**
+     * set the scroll orientation
+     *
+     * @param orientation {@link RecyclerView.Orientation}
+     */
     public void setOrientation(@RecyclerView.Orientation int orientation) {
         mOrientation = orientation;
-        if (mOrientation == RecyclerView.VERTICAL) {
-            if (mInAnimator != null) {
-                mInAnimator.setPropertyName("translationY");
-                mInAnimator.setFloatValues(mTranslationY, 0);
-            }
-            if (mOutAnimator != null) {
-                mOutAnimator.setPropertyName("translationY");
-                mOutAnimator.setFloatValues(0, -mTranslationY);
-            }
-            Log.d("=======", "mTranslationY = " + mTranslationY);
-            Log.d("=======", "mTranslationX = " + mTranslationX);
+        boolean vertical = mOrientation == RecyclerView.VERTICAL;
 
-        } else {
-            if (mInAnimator != null) {
-                mInAnimator.setPropertyName("translationX");
-                mInAnimator.setFloatValues(mTranslationX, 0);
+        if (animatorSet != null) {
+            // if animator set is not null, maybe the view is in animation,
+            // so we need end the animator first.
+            animatorSet.end();
+        }
+
+        // reset the shadowed view position,
+        // because Animator change the View position forever, and we have move the shadowed view out of screen
+        // so we need to reset the shadowed view to right position.
+        if (shadowedVH != null) {
+            if (vertical) {
+                shadowedVH.itemView.setX(showingVH.itemView.getX());
+            } else {
+                shadowedVH.itemView.setY(showingVH.itemView.getY());
             }
-            if (mOutAnimator != null) {
-                mOutAnimator.setPropertyName("translationX");
-                mOutAnimator.setFloatValues(0, -mTranslationX);
-            }
-            Log.d("=======", "mTranslationY = " + mTranslationY);
-            Log.d("=======", "mTranslationX = " + mTranslationX);
+        }
+
+        if (mInAnimator != null) {
+            mInAnimator.setPropertyName(vertical ? "translationY" : "translationX");
+            mInAnimator.setFloatValues(vertical ? mTranslationY : mTranslationX, 0);
+        }
+        if (mOutAnimator != null) {
+            mOutAnimator.setPropertyName(vertical ? "translationY" : "translationX");
+            mOutAnimator.setFloatValues(0, vertical ? -mTranslationY : -mTranslationX);
         }
     }
 
@@ -309,7 +318,6 @@ public class ViewsFlipper extends FrameLayout {
     private void initAnimation() {
         mInAnimator = defaultInAnimator();
         mOutAnimator = defaultOutAnimator();
-        setOrientation(RecyclerView.VERTICAL);
     }
 
     private ObjectAnimator defaultInAnimator() {
@@ -343,17 +351,7 @@ public class ViewsFlipper extends FrameLayout {
         super.onSizeChanged(w, h, oldW, oldH);
         mTranslationY = getMeasuredHeight();
         mTranslationX = getMeasuredWidth();
-        if (mOrientation == RecyclerView.VERTICAL) {
-            if (mInAnimator != null && mOutAnimator != null) {
-                mInAnimator.setFloatValues(mTranslationY, 0);
-                mOutAnimator.setFloatValues(0, -mTranslationY);
-            }
-        } else {
-            if (mInAnimator != null && mOutAnimator != null) {
-                mInAnimator.setFloatValues(mTranslationX, 0);
-                mOutAnimator.setFloatValues(0, -mTranslationX);
-            }
-        }
+        setOrientation(mOrientation);
     }
 
     /**
@@ -385,7 +383,6 @@ public class ViewsFlipper extends FrameLayout {
                         public void onAnimationStart(Animator animation) {
                             super.onAnimationStart(animation);
                             child.setVisibility(View.VISIBLE);
-
                         }
 
                         @Override
