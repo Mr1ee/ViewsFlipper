@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -43,6 +44,8 @@ public class ViewsFlipper extends FrameLayout {
      * （为什么不从onMeasure？是因为每次设置childView VISIBLE的时候都会触发重绘，每次都要执行onMeasure，感觉太频繁了）
      */
     private int mTranslationY;
+
+    private int mTranslationX;
 
     /**
      * view in animator
@@ -84,6 +87,12 @@ public class ViewsFlipper extends FrameLayout {
      * current data index, get from {@link RecyclerView.Adapter#getItemCount())
      */
     private int mPosition = 0;
+
+    /**
+     * view scroll orientation
+     */
+    @RecyclerView.Orientation
+    private int mOrientation = RecyclerView.VERTICAL;
 
     private RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter;
 
@@ -217,6 +226,39 @@ public class ViewsFlipper extends FrameLayout {
         return mFlipDuration;
     }
 
+    public void setOrientation(@RecyclerView.Orientation int orientation) {
+        mOrientation = orientation;
+        if (mOrientation == RecyclerView.VERTICAL) {
+            if (mInAnimator != null) {
+                mInAnimator.setPropertyName("translationY");
+                mInAnimator.setFloatValues(mTranslationY, 0);
+            }
+            if (mOutAnimator != null) {
+                mOutAnimator.setPropertyName("translationY");
+                mOutAnimator.setFloatValues(0, -mTranslationY);
+            }
+            Log.d("=======", "mTranslationY = " + mTranslationY);
+            Log.d("=======", "mTranslationX = " + mTranslationX);
+
+        } else {
+            if (mInAnimator != null) {
+                mInAnimator.setPropertyName("translationX");
+                mInAnimator.setFloatValues(mTranslationX, 0);
+            }
+            if (mOutAnimator != null) {
+                mOutAnimator.setPropertyName("translationX");
+                mOutAnimator.setFloatValues(0, -mTranslationX);
+            }
+            Log.d("=======", "mTranslationY = " + mTranslationY);
+            Log.d("=======", "mTranslationX = " + mTranslationX);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public int getOrientation() {
+        return mOrientation;
+    }
+
     @SuppressWarnings("unchecked cast, unused")
     public <VH extends RecyclerView.ViewHolder, T extends RecyclerView.Adapter<VH>> void setAdapter(T adapter) {
         if (adapter == null || adapter.getItemCount() <= 0) {
@@ -267,16 +309,31 @@ public class ViewsFlipper extends FrameLayout {
     private void initAnimation() {
         mInAnimator = defaultInAnimator();
         mOutAnimator = defaultOutAnimator();
+        setOrientation(RecyclerView.VERTICAL);
     }
 
     private ObjectAnimator defaultInAnimator() {
-        ObjectAnimator anim = ObjectAnimator.ofFloat(null, "translationY", mTranslationY, 0);
+        ObjectAnimator animY = ObjectAnimator.ofFloat(null, "translationY", mTranslationY, 0);
+        ObjectAnimator animX = ObjectAnimator.ofFloat(null, "translationX", mTranslationX, 0);
+        ObjectAnimator anim;
+        if (mOrientation == RecyclerView.VERTICAL) {
+            anim = animY;
+        } else {
+            anim = animX;
+        }
         anim.setDuration(DEFAULT_FLIP_DURATION);
         return anim;
     }
 
     private ObjectAnimator defaultOutAnimator() {
-        ObjectAnimator anim = ObjectAnimator.ofFloat(null, "translationY", 0, -mTranslationY);
+        ObjectAnimator animY = ObjectAnimator.ofFloat(null, "translationY", 0, -mTranslationY);
+        ObjectAnimator animX = ObjectAnimator.ofFloat(null, "translationX", 0, -mTranslationX);
+        ObjectAnimator anim;
+        if (mOrientation == RecyclerView.VERTICAL) {
+            anim = animY;
+        } else {
+            anim = animX;
+        }
         anim.setDuration(DEFAULT_FLIP_DURATION);
         return anim;
     }
@@ -285,8 +342,18 @@ public class ViewsFlipper extends FrameLayout {
     protected void onSizeChanged(int w, int h, int oldW, int oldH) {
         super.onSizeChanged(w, h, oldW, oldH);
         mTranslationY = getMeasuredHeight();
-        mInAnimator.setFloatValues(mTranslationY, 0);
-        mOutAnimator.setFloatValues(0, -mTranslationY);
+        mTranslationX = getMeasuredWidth();
+        if (mOrientation == RecyclerView.VERTICAL) {
+            if (mInAnimator != null && mOutAnimator != null) {
+                mInAnimator.setFloatValues(mTranslationY, 0);
+                mOutAnimator.setFloatValues(0, -mTranslationY);
+            }
+        } else {
+            if (mInAnimator != null && mOutAnimator != null) {
+                mInAnimator.setFloatValues(mTranslationX, 0);
+                mOutAnimator.setFloatValues(0, -mTranslationX);
+            }
+        }
     }
 
     /**

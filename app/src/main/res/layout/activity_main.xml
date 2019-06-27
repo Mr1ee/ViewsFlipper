@@ -13,7 +13,6 @@
         android:layout_height="40dp"
         android:background="@android:color/holo_orange_dark"
         android:gravity="center"
-        android:padding="10dp"
         android:text="change data"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,8 +24,19 @@
         android:layout_height="40dp"
         android:background="@android:color/holo_orange_dark"
         android:gravity="center"
-        android:padding="10dp"
         android:text="change adapter"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/btn_change_orientation"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:background="@android:color/holo_orange_dark"
+        android:gravity="center"
+        android:text="orientation"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText" />

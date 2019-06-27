@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         final ViewsFlipper flipper = findViewById(R.id.flipper);
         final FlipperAdapter adapter = new FlipperAdapter(items);
         flipper.setAdapter(adapter);
+        flipper.setOrientation(RecyclerView.HORIZONTAL);
         flipper.startFlipping();
 
         Button btn = findViewById(R.id.btn_change_data);
@@ -63,6 +64,15 @@ public class MainActivity extends AppCompatActivity {
                 flipper.startFlipping();
             }
         });
+
+        Button btn3 = findViewById(R.id.btn_change_orientation);
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flipper.setOrientation(flipper.getOrientation() == RecyclerView.VERTICAL ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL);
+            }
+        });
+
     }
 
     private void initData() {
