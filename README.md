@@ -83,3 +83,4 @@ getFlipInterval|获取轮播间隔时间
 setFlipDuration|设置滚动动画时间
 getFlipDuration|获取滚动动画时间
 setOrientation|设置滚动方向
+getOrientation|获取当前滚动方向
