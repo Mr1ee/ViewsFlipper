@@ -25,6 +25,7 @@ Activity中Example，
     final ViewsFlipper flipper = findViewById(R.id.flipper);
     final FlipperAdapter adapter = new FlipperAdapter(items);
     flipper.setAdapter(adapter);
+    flipper.setOrientation(RecyclerView.HORIZONTAL);
     flipper.startFlipping();
     
     class FlipperAdapter extends RecyclerView.Adapter<VH> {
@@ -68,9 +69,11 @@ Activity中Example，
     }
 ```
 从代码中就看出使用非常简单，用法完全和RecyclerView一致，而且更重要的是，和RecyclerView一样，完全可以自己定制各种Child View。
+1-支持数据的动态更新，和RecyclerView一样，改变数据之后需要调用Adapter.notifyDataSetChanged；
+2-支持设置滚动方向，支持垂直滚动和水平滚动。只需要调用ViewsFlipper.setOrientation即可，参数是RecyclerView.HORIZONTAL或者RecyclerView.VERTICAL。
 
 # API
-Function | 目的  
+Function | 作用  
 -|-
 setAdapter|设置数据源
 startFlipping|开始轮播
@@ -79,3 +82,4 @@ setFlipInterval|设置轮播间隔时间
 getFlipInterval|获取轮播间隔时间
 setFlipDuration|设置滚动动画时间
 getFlipDuration|获取滚动动画时间
+setOrientation|设置滚动方向
