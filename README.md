@@ -69,8 +69,9 @@ Activity中Example，
     }
 ```
 从代码中就看出使用非常简单，用法完全和RecyclerView一致，而且更重要的是，和RecyclerView一样，完全可以自己定制各种Child View。
-1-支持数据的动态更新，和RecyclerView一样，改变数据之后需要调用Adapter.notifyDataSetChanged；
-2-支持设置滚动方向，支持垂直滚动和水平滚动。只需要调用ViewsFlipper.setOrientation即可，参数是RecyclerView.HORIZONTAL或者RecyclerView.VERTICAL。
+支持功能：
+* 支持Adapter数据的动态更新，改变数据之后需要调用Adapter.notifyDataSetChanged，不过更新之后会从第一项数据开始展示。
+* 支持设置滚动方向，支持垂直滚动和水平滚动。只需要调用ViewsFlipper.setOrientation即可，参数是RecyclerView.HORIZONTAL或者RecyclerView.VERTICAL。
 
 # API
 Function | 作用  
