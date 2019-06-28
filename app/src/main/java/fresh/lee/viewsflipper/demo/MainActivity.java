@@ -3,18 +3,39 @@ package fresh.lee.viewsflipper.demo;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.ImageSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StrikethroughSpan;
+import android.text.style.StyleSpan;
+import android.text.style.SubscriptSpan;
+import android.text.style.SuggestionSpan;
+import android.text.style.SuperscriptSpan;
+import android.text.style.URLSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.util.Pair;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +93,30 @@ public class MainActivity extends AppCompatActivity {
                 flipper.setOrientation(flipper.getOrientation() == RecyclerView.VERTICAL ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL);
             }
         });
+
+        TextView tvSpan = findViewById(R.id.tv_span_test);
+        SpannableString string = new SpannableString("我已经从你的全世界路过");
+//        string.setSpan(new ForegroundColorSpan(Color.RED), 0, 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        string.setSpan(new BackgroundColorSpan(Color.CYAN), 0, 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        string.setSpan(new RelativeSizeSpan(2.0f), 0, 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        string.setSpan(new AbsoluteSizeSpan(getResources().getDimensionPixelOffset(R.dimen.text_32sp)), 0, 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        string.setSpan(new UnderlineSpan(), 0, 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+
+//        string.setSpan(new ClickableSpan() {
+//            @Override
+//            public void onClick(View widget) {
+//                Toast.makeText(MainActivity.this, "click ME！", Toast.LENGTH_LONG).show();
+//            }
+//        }, 0, 2, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        string.setSpan(new URLSpan("https://me.csdn.net/blog/newcoderzZ"), 0, 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        tvSpan.setMovementMethod(LinkMovementMethod.getInstance());
+//        string.setSpan(new ImageSpan(this, R.drawable.ic_favorite_black_24dp), 0, 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        string.setSpan(new StyleSpan(Typeface.BOLD), 0, 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        string.setSpan(new StyleSpan(Typeface.BOLD_ITALIC), 0, 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        string.setSpan(new SubscriptSpan(), 0, 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        string.setSpan(new SuperscriptSpan(), 0, 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+
+        tvSpan.setText(string);
 
     }
 
