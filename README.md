@@ -6,6 +6,7 @@
 <img width="360" height="640" src=https://github.com/Mr1ee/ViewsFlipper/blob/master/screenshots/screenshot2.gif/>
 # 使用方法
 在XML中设置如下。其中flipDuration表示动画时长， flipInterval是轮播间隔时间，flipInterval一定要大于flipDuration，否则会抛出异常。
+
 ```java
     <fresh.lee.viewsflipper.ViewsFlipper
         android:id="@+id/flipper"
